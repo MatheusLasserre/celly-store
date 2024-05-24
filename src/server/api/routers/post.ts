@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { posts } from "~/server/db/schema";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -18,14 +17,16 @@ export const postRouter = createTRPCRouter({
       // simulate a slow db call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      await ctx.db.insert(posts).values({
-        name: input.name,
+      return ctx.db.post.create({
+        data: {
+          name: input.name,
+        },
       });
     }),
 
   getLatest: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.posts.findFirst({
-      orderBy: (posts, { desc }) => [desc(posts.createdAt)],
+    return ctx.db.post.findFirst({
+      orderBy: { createdAt: "desc" },
     });
   }),
 });
