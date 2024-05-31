@@ -1,0 +1,125 @@
+.FlexRow[data-width="4"] > div {
+    width: 4% !important;
+}
+
+.FlexRow[data-width="8"]  > div{ 
+    width: 8% !important;
+}
+
+.FlexRow[data-width="12"] > div {
+    width: 12% !important;
+}
+
+.FlexRow[data-width="16"] > div {
+    width: 16% !important;
+}
+
+.FlexRow[data-width="20"] > div {
+    width: 20% !important;
+}
+
+.FlexRow[data-width="24"] > div {
+    width: 24% !important;
+}
+
+.FlexRow[data-width="28"] > div {
+    width: 28% !important;
+}
+
+.FlexRow[data-width="32"] > div {
+    width: 32% !important;
+}
+
+.FlexRow[data-width="36"] > div {
+    width: 36% !important;
+}
+
+.FlexRow[data-width="40"] > div {
+    width: 40% !important;
+}
+
+.FlexRow[data-width="44"] > div {
+    width: 44% !important;
+}
+
+.FlexRow[data-width="48"] > div {
+    width: 48% !important;
+}
+
+.FlexRow[data-width="52"] > div {
+    width: 52% !important;
+}
+
+.FlexRow[data-width="56"] > div {
+    width: 56% !important;
+}
+
+.FlexRow[data-width="60"] > div {
+    width: 60% !important;
+}
+
+.FlexRow[data-width="64"] > div {
+    width: 64% !important;
+}
+
+.FlexRow[data-width="68"] > div {
+    width: 68% !important;
+}
+
+.FlexRow[data-width="72"] > div {
+    width: 72% !important;
+}
+
+.FlexRow[data-width="76"] > div {
+    width: 76% !important;
+}
+
+.FlexRow[data-width="80"] > div {
+    width: 80% !important;
+}
+
+.FlexRow[data-width="84"] > div {
+    width: 84% !important;
+}
+
+.FlexRow[data-width="88"] > div {
+    width: 88% !important;
+}
+
+.FlexRow[data-width="92"] > div {
+    width: 92% !important;
+}
+
+.FlexRow[data-width="96"] > div {
+    width: 96% !important;
+}
+
+.FlexRow[data-width="100"] > div {
+    width: 100% !important; 
+}
+
+
+.IconColorizer * {
+    fill: currentColor;
+}
+
+.IconColorizer > svg {
+    width: 100%;
+    height: auto;
+}
+
+.IconColorizer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.IconBackgroundNormalizer {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+

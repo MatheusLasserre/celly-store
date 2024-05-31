@@ -10,11 +10,122 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
+model user {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    name      String
+    password  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model category {
+    id          Int       @id @default(autoincrement())
+    name        String    @unique
+    description String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    public      Boolean   @default(false)
+    products    product[]
+
+    @@index([public])
+}
+
+model product {
+    id          Int              @id @default(autoincrement())
+    name        String           @unique
+    price       Decimal
+    description String
+    quantity    Int
+    available   Boolean          @default(false)
+    images      product_images[]
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+    cost        Decimal          @default(0)
+    category    category         @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+    categoryId  Int
+    code        String           @unique
+    profit      Decimal          @default(0)
+    collections collection[]
+    orders      order[]
+}
+
+model product_images {
+    id        Int      @id @default(autoincrement())
+    productId Int
+    product   product  @relation(fields: [productId], references: [id])
+    image     String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Missing full fill sales - per customer
+// Pesquisa por código
+// Adicionar grupo do cliente
+model business {
+    id        Int      @id @default(autoincrement())
+    name      String
+    email     String
+    phone     String
+    whatsapp  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    featuredCollection   collection? @relation(fields: [featuredCollectionId], references: [id])
+    featuredCollectionId Int?        @unique
+}
+
+model collection {
+    id          Int       @id @default(autoincrement())
+    name        String    @unique
+    description String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    public      Boolean   @default(false)
+    business    business?
+    products    product[]
+}
+
+model ErrorLogs {
+    id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    message String
+    stack   String
+    info    String
+    userId  BigInt? @db.UnsignedBigInt
+}
+
+model groups {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    description String
+    createdAt   DateTime @default(now())
+    phone       String   @default("Edite este número")
+    updatedAt   DateTime @updatedAt
+    order       order[]
+}
+
+model order {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    products        product[]
+    group           groups?         @relation(fields: [groupId], references: [id])
+    groupId         Int?
+    total           Decimal
+    paymentMethod   payment_methods @relation(fields: [paymentMethodId], references: [id])
+    paymentMethodId Int
+}
+
+model payment_methods {
     id        Int      @id @default(autoincrement())
     name      String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    taxRate       Decimal
 
-    @@index([name])
+    order order[]
 }

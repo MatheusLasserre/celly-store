@@ -1,0 +1,137 @@
+.dividerBorder {
+    border-bottom: 1px solid #D3DAE6;
+}
+
+.tab {
+    cursor: pointer;
+    border-bottom: 1px solid #D3DAE6;
+}
+
+.activeTab {
+    cursor: pointer;
+    border-bottom: 2px solid #006BB4;
+}
+
+.table {
+    color: white;
+    /* width: 100%; */
+    background-color: var(--neutral-700);
+    border-radius: 8px;
+    margin-top: 10px;
+    overflow-y: visible;
+    overflow-x: auto;
+}
+
+.tbody,
+.thead,
+.tfoot {
+    font-size: 14px;
+    line-height: '18px';
+    font-weight: 400;
+}
+
+.tr{
+    background-color: var(--neutral-500);
+    border-bottom: 1px solid var(--white-20);
+}
+
+.td {
+    vertical-align: text-top;
+}
+
+.th {
+    vertical-align: bottom;
+    background-color: var(--neutral-700);
+}
+
+.th,
+.td {
+    text-align: left;
+    padding: 1rem 1rem 1rem 1rem;
+    /* text-indent: -0.5em; */
+    /* width: fit-content; */
+}
+
+.tr:hover {
+    background-color: var(--neutral-600);
+}
+
+.tr:last-of-type {
+    border-bottom: none;
+}
+
+.td::before {
+    display: none;
+}
+
+.td > svg,.th > svg {
+ margin-left: 14px;
+}
+
+.td > svg:hover > path,.th > svg:hover > path {
+  fill: var(--secondary-orange-400);
+ }
+ 
+
+@media screen and (max-width: 1100px), print and (max-width: 5in) {
+    .tbody {
+        width: 100%;
+        display: block;
+    }
+    .table,
+    .tr,
+    .td {
+      display: block;
+    }
+    .tr {
+      padding: 0.7em 2vw;
+      width: 100%;
+    }
+    .th, .thead {
+      display: none;
+    }
+    .td::before {
+      display: inline;
+      font-weight: bold;
+      hyphens: manual;
+      word-break: break-word;
+    }
+    .td {
+      display: grid;
+      grid-template-columns: 5em auto;
+      grid-gap: 1em 0.5em;
+      width: 100%;
+    }
+    .td::before {
+        display: inline;
+        font-size: normal;
+        font-weight: bold;
+        color: var(--white-90);
+    }
+    .td > svg,.th > svg {
+      margin-left: 0px;
+     }
+  }
+  
+  @media print {
+    .table {
+      page-break-inside: avoid;
+    }
+    .th {
+      color: #000;
+      background-color: #fff;
+      border-bottom: 1pt solid #000;
+    }
+    .tr {
+      border-top: 1pt solid #000;
+    }
+  }
+  
+  @media print and (max-width: 5in) {
+    .table {
+      page-break-inside: auto;
+    }
+    .tr {
+      page-break-inside: avoid;
+    }
+  }

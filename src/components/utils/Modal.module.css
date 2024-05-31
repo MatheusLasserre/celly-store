@@ -1,0 +1,85 @@
+.modalBox {
+    background-color: var(--WHITE2);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: -20vh;
+    width: 100%;
+    position: relative;
+    border-radius: 16px;
+}
+
+.modalTitle {
+    font-size: 2.8rem;
+    font-weight: 300;
+    color: var(--N-PURPLE1);
+    margin-bottom: 20px;
+}
+
+.modalMessage {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--N-GRAY1);
+    margin-bottom: 20px;
+}
+
+.modalButtons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 20px;
+}
+
+
+.contextMenuBox {
+    position: fixed;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    z-index: 100;
+    box-shadow: 8px 3px 22px 10px rgba(150, 150, 150, 0.11);
+    border: 2px solid #DFDFDF;
+    width: fit-content;
+}
+
+.contextMenuItem {
+    padding: 4px 20px;
+    cursor: pointer;
+    /* transition: background-color 0.1s; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+   
+}
+
+.contextMenuItem > p {
+    font-size: 12px;
+    line-height: 16px;
+    color: #202124;
+    font-weight: 400;
+    font-family: Inter;
+    text-align: left;
+    margin: 0;
+}
+
+.contextMenuItem:hover {
+    background-color: #017D73B2;
+}
+
+.contextMenuItem:hover > p {
+    color: #fff;
+}
+
+.contextMenuDivider {
+    background-color: #DFDFDF;
+    width: 100%;
+    margin: 0;
+    height: 1px;
+}

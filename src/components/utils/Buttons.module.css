@@ -1,0 +1,159 @@
+.button {
+    width: 100%;
+    height: 59px;
+    line-height: 59px;
+    text-align: center;
+    border-radius: 16px;
+    background-color: var(--primary-500);
+    color: var(--white-90);
+    font-weight: 600;
+    font-size: 16px;
+    border-style: none;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0;
+    transition: all 0.1s var(--BEZIER);
+}
+
+.button:hover {
+    background-color: var(--primary-600);
+}
+
+.compact {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    border-radius: 16px;
+    background-color: var(--primary-500);
+    color: var(--white-90);
+    font-weight: 600;
+    font-size: 14px;
+    border-style: none;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0;
+    transition: all 0.1s var(--BEZIER);
+}
+
+.compact:hover {
+    background-color: var(--primary-600);
+}
+
+
+.outline {
+    width: 100%;
+    height: 59px;
+    line-height: 59px;
+    text-align: center;
+    border-radius: 16px;
+    background-color: transparent;
+    border: 1px solid var(--primary-500);
+    color: var(--primary-500);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0;
+    transition: all 0.1s var(--BEZIER);
+}
+
+.outline:hover {
+    background-color: var(--primary-500);
+    color: var(--white-90);
+}
+
+.outlineCompact {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    border-radius: 16px;
+    background-color: transparent;
+    border: 1px solid var(--primary-500);
+    color: var(--primary-500);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0;
+    transition: all 0.1s var(--BEZIER);
+}
+
+.outlineCompact:hover {
+    background-color: var(--primary-500);
+    color: var(--white-90);
+}
+
+.miniLink1 {
+    font-size: 12px;
+    color: var(--secondary-blue-300);
+    text-decoration: underline;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    cursor: pointer;
+}
+
+.iconButton1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 67px;
+    height: 67px;
+    border: 1.25px solid var(--white-70);
+    border-radius: 12.5px;
+    cursor: pointer;
+    transition: all 0.1s var(--BEZIER);
+}
+
+.iconButton1:hover {
+    background-color: var(--white-90);
+}
+
+.iconButton1 > svg > path {
+    width: 24px;
+    height: 24px;
+    fill: var(--white-70);
+    transition: all 0.1s var(--BEZIER);
+}
+
+.iconButton1:hover > svg > path {
+    fill: var(--neutral-500);
+}
+
+.LIconBox {
+    width: 67px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.LIconBox>p {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: var(--white-70);
+    margin-bottom: 0;
+    margin-top: 12px;
+}
+
+
+
+.BackgroundIconButton {
+    border-radius: 50%;
+}
+
+.BlankLink {
+    text-decoration: underline;
+}
+
+.backButton > p {
+    text-decoration: underline !important;
+}

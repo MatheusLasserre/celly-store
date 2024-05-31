@@ -1,0 +1,876 @@
+.inputWrapper {
+    width: fit-content;
+    position: relative;
+}
+
+.textInputContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: 30px;
+    gap: 2px;
+    border: 1px solid var(--GRAY1-30);
+    width: 133px;
+    border-radius: 4px;
+    margin: 0;
+    background-color: var(--WHITE1);
+    padding-left: 3px;
+    box-shadow: var(--SHADOW);
+}
+
+.textInputDay {
+    width: 3ch;
+    border: none;
+    height: 20px;
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+
+}
+
+.textInputDay:focus,
+.textInput:focus,
+.textInputYear:focus {
+    outline: none;
+    border: none;
+}
+
+.textInput {
+    width: 3ch;
+    border: none;
+    height: 20px;
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+    background-color: var(--WHITE1);
+
+}
+
+
+.textInputYear {
+    width: 5ch;
+    border: none;
+    height: 20px;
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+
+}
+
+
+.textInputDivider {
+    height: 20px;
+    line-height: 20px;
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+    margin-left: -2px;
+    margin-right: -2px;
+}
+
+.inputIcon {
+    margin: auto;
+    margin-left: 6px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+}
+
+.calendarContainer {
+    position: absolute;
+    left: 0;
+    top: 30px;
+    box-shadow: var(--SHADOW-MD);
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    overflow: hidden;
+    /* width: 100%; */
+    height: 320px;
+    border: 1px solid var(--GRAY1);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    z-index: 999;
+    background-color: var(--WHITE1);
+}
+
+.calendarContainer2 {
+    position: absolute;
+    left: 0;
+    right: 0;
+    box-shadow: var(--SHADOW-MD);
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    overflow: hidden;
+    width: 100%;
+    height: 320px;
+    border: 1px solid var(--GRAY1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    background-color: var(--WHITE1);
+    transform: scale(1.4);
+}
+
+.calendarWrapper {
+    position: relative;
+    width: 100%;
+    margin: auto;
+    width: 340px;
+    height: 340px;
+    margin-top: 80px;
+    margin-left: 240px;
+}
+@media screen and (max-width:1260px) {
+
+    .textInputContainer {
+        width: 93px;
+    }
+
+    .textInput, .textInputDay, .textInputDivider, .textInputYear {
+        font-size: 10px;
+    }
+
+
+    .inputIcon {
+        margin-left: 0 !important;
+        margin-right: 0;
+    }
+
+    .inputIcon > svg {
+        width: 14px;
+        height: 14px;
+    }
+
+
+}
+
+/* Time Picker CSS */
+
+
+.timeInputContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: 30px;
+    gap: 2px;
+    border: 1px solid var(--GRAY1);
+    background-color: var(--WHITE1);
+    width: 86px;
+    border-radius: 4px;
+    margin: 0;
+}
+
+.timeInputDay {
+    width: 3ch;
+    border: none;
+    height: 20px;
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+
+}
+
+.timeInput:focus {
+    outline: none;
+    border: none;
+}
+
+.timeInput {
+    width: 3ch;
+    border: none;
+    height: 20px;
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+
+}
+
+.timeInputDivider {
+    height: 20px;
+    line-height: 20px;
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+    margin-left: -2px;
+    margin-right: -2px;
+}
+
+.inputIcon {
+    margin: auto;
+    margin-left: 6px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+}
+
+.pickerInput {
+    display: none;
+}
+
+.pickerPopup {
+    background-color: var(--BLACK1-30);
+}
+
+@media screen and (max-width:1260px) {
+    
+        .timeInputContainer {
+            width: 60px;
+        }
+    
+        .timeInput, .timeInputDay, .timeInputDivider {
+            font-size: 10px;
+        }
+
+
+}
+
+/* Coordinates Selection */
+
+.coordContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+}
+
+.coordContainer>label {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.decInput {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: 30px;
+    gap: 2px;
+    border: 1px solid var(--GRAY1);
+    width: 8ch;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.decInputBox {
+    position: relative;
+}
+
+.decInputBox::after {
+    content: "°";
+    position: absolute;
+    right: 0px;
+    top: 1px;
+    bottom: 0;
+    margin: auto;
+    padding-right: 6px;
+    font-size: 14px;
+    /* background-color: red; */
+}
+
+.dmsInputContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: 30px;
+    gap: 2px;
+    border: 1px solid var(--GRAY1);
+    background-color: var(--WHITE1);
+    width: 110px;
+    border-radius: 4px;
+}
+
+.dmsInput {
+    border: none;
+    width: 32px;
+    text-align: center;
+}
+
+.dmsInput:focus {
+    outline: none;
+    border: none;
+}
+
+.dmsInputBox {
+    position: relative;
+}
+
+.dmsInputBox:nth-of-type(1)::after {
+    content: "°";
+    position: absolute;
+    right: -8px;
+    top: 1px;
+    bottom: 0;
+    margin: auto;
+    padding-right: 6px;
+    font-size: 14px;
+    /* background-color: red; */
+}
+
+.dmsInputBox:nth-of-type(2)::after {
+    content: "\'";
+    position: absolute;
+    right: -8px;
+    top: 1px;
+    bottom: 0;
+    margin: auto;
+    padding-right: 6px;
+    font-size: 14px;
+    /* background-color: red; */
+}
+
+.dmsInputBox:nth-of-type(3)::after {
+    content: "\"";
+    position: absolute;
+    right: -8px;
+    top: 1px;
+    bottom: 0;
+    margin: auto;
+    padding-right: 6px;
+    font-size: 14px;
+    /* background-color: red; */
+}
+
+.coordType {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    /* margin-top: 10px; */
+    margin-left: 5px;
+    height: 100%;
+}
+
+.coordTypeOptions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.coordTypeText {
+    font-size: 10px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.coordTypeButton {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid var(--GRAY1);
+    background-color: var(--WHITE1);
+    cursor: pointer;
+    /* padding: 2px; */
+    
+}
+
+.coordTypeButtonActive {
+    background-color: var(--BLUE1);
+    border: none;
+}
+
+@media screen and (max-width:1260px) {
+
+    .coordContainer {
+        flex-wrap: wrap;
+    }
+
+    .coordContainer > label {
+        font-size: 12px;
+    }
+
+    .decInput {
+        font-size: 10px;
+    }
+
+    .dmsInput {
+        font-size: 10px;
+
+    }
+
+    .dmsInputContainer {
+        width: 96px;
+        padding-left: 2px;
+    }
+
+    .dmsInput:nth-of-type(1) {
+        width: 22px;
+    }
+
+    .dmsInputBox:nth-of-type(1)::after {
+        content: "°";
+        position: absolute;
+        right: -11px;
+        top: 1px;
+        bottom: 0;
+        margin: auto;
+        padding-right: 8px;
+        font-size: 14px;
+        /* background-color: red; */
+    }
+    
+    .dmsInputBox:nth-of-type(2)::after {
+        content: "\'";
+        position: absolute;
+        right: -11px;
+        top: 1px;
+        bottom: 0;
+        margin: auto;
+        padding-right: 8px;
+        font-size: 14px;
+        /* background-color: red; */
+    }
+    
+    .dmsInputBox:nth-of-type(3)::after {
+        content: "\"";
+        position: absolute;
+        right: -11px;
+        top: 1px;
+        bottom: 0;
+        margin: auto;
+        padding-right: 8px;
+        font-size: 14px;
+        /* background-color: red; */
+    }
+
+    .coordType {
+        flex-direction: row;
+        gap: 14px;
+        order: 1;
+    }
+
+    .coordTypeOptions {
+        gap: 2px;
+    }
+    
+    .coordTypeText {
+        font-size: 8px;
+        margin-left: 0;
+    }
+
+
+
+
+}
+
+/* Date Range */
+
+.filterDateItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.filterDateLabel {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--BLACK1);
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.filterDateText {
+    width: 100%;
+    padding: 4px;
+    font-family: Montserrat;
+    color: var(--BLACK1);
+    font-weight: 500;
+    margin: 0;
+    cursor: pointer;
+    background-color: var(--WHITE1);
+    border: 1px solid var(--GRAY1-30);
+    border-radius: 4px;
+    box-shadow: var(--SHADOW);
+    height: 28px;
+    line-height: 20px;
+    font-size: 1.2rem;
+    text-align: center;
+    letter-spacing: 0.2px;
+}
+
+.filterDateModalWrap {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: var(--BLACK1-30);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+}
+
+.filterDateMini {
+    font-size: 1rem;
+    color: var(--RED1);
+    text-align: center;
+    text-decoration: underline;
+    margin-top: 3px;
+}
+
+.contentWrapper {
+    width: 100%;
+    /* max-width: 300px; */
+    position: relative;
+}
+
+.contentWrapper > select {
+    width: 100%;
+    height: 30px;
+    padding-left: 5px;
+    font-size: 1.3rem;
+    line-height: 3rem;
+    /* letter-spacing: 0.14px; */
+    /* font-family: Inter; */
+    font-weight: 400;
+    background: var(--WHITE1);
+    border: 1px solid var(--GRAY1-30);
+    border-radius: 4px;
+    box-shadow: var(--SHADOW);
+    color: var(--BLACK1);
+}
+
+.contentWrapper > select:focus {
+    outline: none;
+    border: 2px solid var(--GRAY1-30);
+    box-shadow: var(--SHADOW);
+}
+
+.contentWrapper > select > option {
+    font-size: 1.3rem;
+    line-height: 3rem;
+    /* padding: 5px 5px 5px 5px; */
+    /* letter-spacing: 0.14px; */
+    /* font-family: Inter; */
+    font-weight: 400;
+    color: var(--BLACK1);
+}
+
+.svgIcon {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    fill: var(--GRAY1-50);
+    background-color: var(--WHITE1);
+    pointer-events: none;
+}
+
+
+/* Cards Specific */
+
+.cardsWrapper {
+    width: 100%;
+}
+
+.selectedCards {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+    margin-top: 4PX;
+}
+
+.selectedCard {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+    background-color: var(--GREEN4);
+    border: 1px solid var(--GRAY1-30);
+    box-shadow: var(--SHADOW);
+    height: 30px;
+}
+
+.selectedCardName {
+    color: var(--WHITE1);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.selectedCardRemove {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    margin-left: 4px;
+    cursor: pointer;
+}
+
+.selectedCardRemove > svg > path {
+    fill: var(--WHITE1);
+}
+
+/* Search Selection */
+
+.citySelectionContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    width: 100%;
+}
+
+.countryContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+}
+
+.countryModal {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: absolute;
+    top: 22px;
+    left: 0;
+    background-color: white;
+    border: 1px solid black;
+    display: none;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    z-index: 999;
+    width: 100%;
+}
+
+.countryModalOpen {
+    display: flex;
+}
+
+.countryModalOption {
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-size: 10px;
+    cursor: pointer;
+    margin: 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-family: Montserrat;
+    font-size: 12px;
+}
+
+.countryModalOption:hover {
+    background-color: var(--GRAY1);
+}
+
+.locationInput {
+    height: 30px;
+    gap: 2px;
+    border: 1px solid var(--GRAY1);
+    background-color: var(--WHITE1);
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 110px;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 14px;
+}
+
+/* query input int */
+.queryInputContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: relative;
+}
+
+.queryInputSearch {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.queryInputSearch > p {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.queryInputSearch > input {
+    height: 30px;
+    border: 1px solid var(--GRAY1);
+    background-color: var(--WHITE1);
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.queryResults {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 100%;
+    background-color: var(--WHITE1);
+    border: 1px solid var(--GRAY1);
+    border-radius: 8px;
+    z-index: 999;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.queryItem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.queryItem:hover {
+    background-color: var(--GRAY1-30);
+}
+
+.queryItemLabel {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.queryItemInfo {
+    font-size: 10px;
+    margin: 0;
+    padding: 4px;
+    cursor: pointer;
+}
+
+/* Select Int Custom */
+
+.SICOptions {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    background-color: var(--neutral-500);
+    border: 1px solid var(--white-10);
+    border-radius: 8px;
+    z-index: 999;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.SICOptionsMini::-webkit-scrollbar {
+    display: none;
+}
+
+.SICItem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 8px;
+    cursor: pointer;
+    width: calc(100% + 50px);
+    transition: background-color 0.05s var(--BEZIER);
+    border-bottom: 1px solid var(--white-10);
+}
+
+.SICItem:last-child {
+    border-bottom: none;
+}
+
+.SICItem:hover {
+    background-color: var(--primary-500);
+}
+
+.SICItemLabel {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--white-90);
+}
+
+.SICOptionsMini {
+    position: absolute;
+    top: 21px;
+    left: 0;
+    width: 100%;
+    background-color: var(--neutral-500);
+    border: 1px solid var(--white-10);
+    border-top: none;
+    border-radius: 8px;
+    z-index: 999;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+
+.SICItemMini {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 8px;
+    cursor: pointer;
+    width: calc(100% + 50px);
+    transition: background-color 0.05s var(--BEZIER);
+    border-bottom: 1px solid var(--white-10);
+}
+
+.SICItemMini:last-child {
+    border-bottom: none;
+}
+
+.SICItemMini:hover {
+    background-color: var(--primary-500);
+}
+
+.SICItemLabelMini {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--white-90);
+}
