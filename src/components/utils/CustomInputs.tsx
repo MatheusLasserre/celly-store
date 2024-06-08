@@ -14,9 +14,10 @@ import { isValid } from 'date-fns'
 import Style from './CustomInputs.module.css'
 import { TimePicker } from 'react-time-picker-typescript'
 import { pt } from 'date-fns/locale'
-import { CFalseText, CFalseTextMini, CFalseTextWithRef } from './Inputs'
+import { CFalseText, CFalseTextMini, CFalseTextWithRef, CLText, CText } from './Inputs'
 import { AngleUpIcon } from './Icons'
 import { CSS_VARS } from './colors'
+import { FlexColumn, FlexRow } from './Utils'
 
 type CurrencyInputProps = {
   currencyValue: number
@@ -300,94 +301,89 @@ export const SelectInt: React.FC<SelectIntProps> = ({
   )
 }
 
-export const SelectIntCustom: React.FC<SelectIntProps & {
-  selectedValue?: number | null
-}> = ({
-  SelectConfig,
-  setCurrentSelected,
-  defaultValue,
-  selectedValue
-}) => {
+export const SelectIntCustom: React.FC<
+  SelectIntProps & {
+    selectedValue?: number | null
+  }
+> = ({ SelectConfig, setCurrentSelected, defaultValue, selectedValue }) => {
   const { isTarget, ref, setIsTarget } = useTarget(false)
   return (
     <div className={Style.contentWrapper} ref={ref}>
       <CFalseText
         text={
-          selectedValue ?
-          SelectConfig.options.find(
-            (option) => Number(option[SelectConfig.optionValueKey]) === selectedValue,
-          )?.[SelectConfig.nameKey]
-          :
-          SelectConfig.options.find(
-            (option) => Number(option[SelectConfig.optionValueKey]) === defaultValue,
-          )?.[SelectConfig.nameKey] || 'Selecione'
+          selectedValue
+            ? SelectConfig.options.find(
+                (option) => Number(option[SelectConfig.optionValueKey]) === selectedValue,
+              )?.[SelectConfig.nameKey]
+            : SelectConfig.options.find(
+                (option) => Number(option[SelectConfig.optionValueKey]) === defaultValue,
+              )?.[SelectConfig.nameKey] || 'Selecione'
         }
-        
         onClick={() => setIsTarget(!isTarget)}
       />
-      <div style={{
-        position: 'absolute',
-        top: '50%',
-        right: '8px',
-        transform: 'translateY(-50%)',
-      }}>
-        <AngleUpIcon color={'white-90'} toggle={!isTarget}
-          onClick={() => setIsTarget(!isTarget)}
-        />
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          right: '8px',
+          transform: 'translateY(-50%)',
+        }}
+      >
+        <AngleUpIcon color={'white-90'} toggle={!isTarget} onClick={() => setIsTarget(!isTarget)} />
       </div>
       {isTarget && (
         <div className={Style.SICOptions}>
           {SelectConfig.options.map((element, index) => {
-              return (
-                <div
-                  key={`${element[SelectConfig.optionValueKey]}${index}`}
-                  onClick={() => {setCurrentSelected(Number(element[SelectConfig.optionValueKey])); setIsTarget(false)}}
-                  className={Style.SICItem}
-                >
-                  <p className={Style.SICItemLabel}>
-                    {element[SelectConfig.nameKey]}
-                  </p>
-                </div>
-              )
-            })}
+            return (
+              <div
+                key={`${element[SelectConfig.optionValueKey]}${index}`}
+                onClick={() => {
+                  setCurrentSelected(Number(element[SelectConfig.optionValueKey]))
+                  setIsTarget(false)
+                }}
+                className={Style.SICItem}
+              >
+                <p className={Style.SICItemLabel}>{element[SelectConfig.nameKey]}</p>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
   )
 }
 
-export const SelectIntCustomMini: React.FC<SelectIntProps & {
-  selectedValue?: number | null
-}> = ({
-  SelectConfig,
-  setCurrentSelected,
-  defaultValue,
-  selectedValue
-}) => {
+export const SelectIntCustomMini: React.FC<
+  SelectIntProps & {
+    selectedValue?: number | null
+  }
+> = ({ SelectConfig, setCurrentSelected, defaultValue, selectedValue }) => {
   const { isTarget, ref, setIsTarget } = useTarget(false)
   return (
     <div className={Style.contentWrapper} ref={ref}>
       <CFalseTextMini
         text={
-          selectedValue ?
-          SelectConfig.options.find(
-            (option) => Number(option[SelectConfig.optionValueKey]) === selectedValue,
-          )?.[SelectConfig.nameKey]
-          :
-          SelectConfig.options.find(
-            (option) => Number(option[SelectConfig.optionValueKey]) === defaultValue,
-          )?.[SelectConfig.nameKey] || 'Selecione'
+          selectedValue
+            ? SelectConfig.options.find(
+                (option) => Number(option[SelectConfig.optionValueKey]) === selectedValue,
+              )?.[SelectConfig.nameKey]
+            : SelectConfig.options.find(
+                (option) => Number(option[SelectConfig.optionValueKey]) === defaultValue,
+              )?.[SelectConfig.nameKey] || 'Selecione'
         }
-        
         onClick={() => setIsTarget(!isTarget)}
       />
-      <div style={{
-        position: 'absolute',
-        top: '56%',
-        right: '4px',
-        transform: 'translateY(-50%)',
-      }}>
-        <AngleUpIcon color={'white-90'} toggle={!isTarget}
+      <div
+        style={{
+          position: 'absolute',
+          top: '56%',
+          right: '4px',
+          transform: 'translateY(-50%)',
+        }}
+      >
+        <AngleUpIcon
+          color={'white-90'}
+          toggle={!isTarget}
           onClick={() => setIsTarget(!isTarget)}
           width={12}
         />
@@ -395,18 +391,19 @@ export const SelectIntCustomMini: React.FC<SelectIntProps & {
       {isTarget && (
         <div className={Style.SICOptionsMini}>
           {SelectConfig.options.map((element, index) => {
-              return (
-                <div
-                  key={`${element[SelectConfig.optionValueKey]}${index}`}
-                  onClick={() => {setCurrentSelected(Number(element[SelectConfig.optionValueKey])); setIsTarget(false)}}
-                  className={Style.SICItemMini}
-                >
-                  <p className={Style.SICItemLabelMini}>
-                    {element[SelectConfig.nameKey]}
-                  </p>
-                </div>
-              )
-            })}
+            return (
+              <div
+                key={`${element[SelectConfig.optionValueKey]}${index}`}
+                onClick={() => {
+                  setCurrentSelected(Number(element[SelectConfig.optionValueKey]))
+                  setIsTarget(false)
+                }}
+                className={Style.SICItemMini}
+              >
+                <p className={Style.SICItemLabelMini}>{element[SelectConfig.nameKey]}</p>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
@@ -646,5 +643,69 @@ export const QueryInputInt: React.FC<QueryInputIntProps> = ({
         </div>
       )}
     </div>
+  )
+}
+
+export const SelectCustomQuery: React.FC<QueryInputIntProps> = ({
+  query,
+  setQuery,
+  data,
+  labelKey,
+  setValue,
+  valueKey,
+  label,
+  infoKey,
+}) => {
+  const { isTarget, ref, setIsTarget } = useTarget(false)
+
+  return (
+    <FlexColumn
+      horizontalAlign='flex-start'
+      verticalAlign='flex-start'
+      styles={{ position: 'relative' }}
+      ref={ref}
+    >
+      <FlexRow horizontalAlign='center' verticalAlign='center' gap='4px'>
+        <CText
+          type='text'
+          placeholder={label}
+          value={query}
+          onChange={(e) => setQuery(e.currentTarget.value)}
+          onClick={() => setIsTarget(true)}
+        />
+      </FlexRow>
+      {isTarget && (
+        <div className={Style.SICQOptions}>
+          {data &&
+            data.length > 0 &&
+            data.map((element) => {
+              return (
+                <div
+                  key={element[valueKey]}
+                  onClick={() => setValue(Number(element[valueKey]))}
+                  className={Style.SICQItem}
+                >
+                  <p className={Style.SICQItemLabel} title={element[labelKey]}>
+                    {typeof element[labelKey] === 'string'
+                      ? element[labelKey].length > 80
+                        ? element[labelKey].slice(0, 80) + '...'
+                        : element[labelKey]
+                      : element[labelKey].toString()}
+                  </p>
+                  {infoKey && element[infoKey] && (
+                    <p className={Style.SICQqueryItemInfo} title={element[infoKey]}>
+                      {typeof element[infoKey] === 'string'
+                        ? element[infoKey].length > 70
+                          ? element[infoKey].slice(0, 70) + '...'
+                          : element[infoKey]
+                        : element[infoKey].toString()}
+                    </p>
+                  )}
+                </div>
+              )
+            })}
+        </div>
+      )}
+    </FlexColumn>
   )
 }

@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
-    "@prisma/client": "^5.10.2",
+    "@prisma/client": "^5.15.0",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.25.0",
     "@trpc/client": "next",
@@ -47,7 +47,7 @@
     "@typescript-eslint/parser": "^7.1.1",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.1.3",
-    "prisma": "^5.10.2",
+    "prisma": "^5.15.0",
     "typescript": "^5.4.2"
   },
   "ct3aMetadata": {

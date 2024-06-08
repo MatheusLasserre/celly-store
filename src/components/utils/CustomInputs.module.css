@@ -706,37 +706,10 @@
 }
 
 /* query input int */
-.queryInputContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    position: relative;
-}
 
-.queryInputSearch {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-}
 
-.queryInputSearch > p {
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
-}
 
-.queryInputSearch > input {
-    height: 30px;
-    border: 1px solid var(--GRAY1);
-    background-color: var(--WHITE1);
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 8px;
-    font-size: 14px;
-}
+
 
 .queryResults {
     position: absolute;
@@ -811,6 +784,7 @@
     width: calc(100% + 50px);
     transition: background-color 0.05s var(--BEZIER);
     border-bottom: 1px solid var(--white-10);
+    width: 100%;
 }
 
 .SICItem:last-child {
@@ -869,6 +843,66 @@
 .SICItemLabelMini {
     font-size: 12px;
     font-weight: 600;
+    margin: 0;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--white-90);
+}
+
+/* Select Int Custom Query */
+
+.SICQOptions {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    background-color: var(--neutral-500);
+    border: 1px solid var(--white-10);
+    border-radius: 8px;
+    z-index: 999;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.SICQOptionsMini::-webkit-scrollbar {
+    display: none;
+}
+
+.SICQItem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 8px;
+    cursor: pointer;
+    width: calc(100% + 50px);
+    transition: background-color 0.05s var(--BEZIER);
+    border-bottom: 1px solid var(--white-10);
+    width: 100%;
+}
+
+
+
+.SICQItem:last-child {
+    border-bottom: none;
+}
+
+.SICQItem:hover {
+    background-color: var(--primary-500);
+}
+
+.SICQItemLabel {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--white-90);
+}
+
+.SICQqueryItemInfo {
+    font-size: 10px;
     margin: 0;
     padding: 4px;
     cursor: pointer;

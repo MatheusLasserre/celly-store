@@ -138,6 +138,84 @@ export const productsRouter = createTRPCRouter({
     }
   }),
 
+  getAllProductsSearch: authProcedure
+    .input(
+      z.object({
+        query: z.string(),
+        limit: z.number().optional(),
+        page: z.number().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const page = input.page || 1
+      const limit = input.limit || 10
+      try {
+        const products = await ctx.prisma.product.findMany({
+          where: {
+            name: {
+              contains: input.query,
+            },
+          },
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            price: true,
+            quantity: true,
+            available: true,
+            images: true,
+            categoryId: true,
+            code: true,
+            cost: true,
+            profit: true,
+          },
+          skip: (page - 1) * limit,
+          take: limit + 1,
+        })
+        const categories = await ctx.prisma.category.findMany({
+          select: {
+            id: true,
+            name: true,
+          },
+        })
+        return {
+          products: products
+            .map((product) => {
+              const categoryName = categories.find(
+                (category) => category.id === product.categoryId,
+              )?.name
+              if (!categoryName) throw new Error('Erro ao buscar categoria')
+              return {
+                id: Number(product.id),
+                name: product.name,
+                description: product.description,
+                price: Number(product.price),
+                quantity: product.quantity,
+                available: product.available,
+                images: product.images,
+                categoryId: product.categoryId,
+                categoryName: categoryName,
+                code: product.code,
+                cost: Number(product.cost),
+                profit: Number(product.profit),
+              }
+            })
+            .slice(0, limit),
+          nextPage: products.length > limit ? true : false,
+        }
+      } catch (error) {
+        const errorMessage = getErrorMessage(error)
+
+        await logOnDb(ctx.prisma, {
+          message: 'On product Router. Error on getAllProductsSearch',
+          stack: errorMessage,
+          info: 'getAllProductsSearch',
+          userId: ctx.session?.user.id,
+        })
+        throw error
+      }
+    }),
+
   updateProduct: authProcedure
     .input(
       z.object({

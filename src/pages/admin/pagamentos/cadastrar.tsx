@@ -3,19 +3,16 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { ContentLayout } from '~/components/layouts/Layouts'
 import { BackButton, FormButton } from '~/components/utils/Buttons'
-import { SelectIntCustom } from '~/components/utils/CustomInputs'
 import { DefaultText, HeadlineText, SubHeadlineText } from '~/components/utils/Headers'
 import {
-  CLabel,
   CLCurrencyInput,
-  CLRadio,
-  CLSelectString,
   CLText,
   FormError,
 } from '~/components/utils/Inputs'
 import { LoadingZero } from '~/components/utils/Loading'
 import { FlexColumn, FlexRow } from '~/components/utils/Utils'
 import { api } from '~/utils/api'
+import { formatPhone } from '~/utils/formating/credentials'
 
 export const Cadastrar: NextPage = () => {
   return (
@@ -33,11 +30,10 @@ const Header: React.FC = () => {
     <FlexColumn>
       <FlexColumn maxWidth='600px' margin='0 0 30px 0'>
         <BackButton />
-        <HeadlineText>Cadastrar nova categoria</HeadlineText>
+        <HeadlineText>Cadastrar novo método de pagamento</HeadlineText>
         <SubHeadlineText>
-          Preencha as informações abaixo para adicionar uma nova categoria. Categorias serão
-          exibidas na página inicial do website como um dos filtros na busca por produtos, bem como
-          poderão ser usadas para filtrar os produtos.
+          Preencha as informações abaixo para adicionar um novo pagamento. Meios de pagamento serão utilizados
+         para calcular as taxas de cada venda.
         </SubHeadlineText>
       </FlexColumn>
     </FlexColumn>
@@ -46,39 +42,40 @@ const Header: React.FC = () => {
 
 const Form: React.FC = () => {
   const router = useRouter()
-  const [categoryInfo, setCategoryInfo] = React.useState({
-    categoryName: '',
-    description: '',
+  const [paymentInfo, setPaymentInfo] = React.useState({
+    name: '',
+    value: 0,
   })
-  const [creatingCategory, setCreatingCategory] = React.useState(false)
+  const [creatingPayment, setCreatingPayment] = React.useState(false)
   const [success, setSuccess] = React.useState(false)
 
   const utils = api.useUtils()
-  const createCategory = api.categories.createCategory.useMutation({
-    onSuccess: (data) => {
-      utils.categories.getAllCategories.invalidate()
+  const createPayment = api.payments.createPayment.useMutation({
+    onSuccess: () => {
+      utils.payments.getAllPayments.invalidate()
+      utils.payments.getAvailablePayments.invalidate()
     },
     onError: () => {
-      setCreatingCategory(false)
+      setCreatingPayment(false)
     },
   })
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!categoryInfo.categoryName) return alert('Digite o nome da categoria.')
-    if (!categoryInfo.description) return alert('Digite a descrição.')
-    setCreatingCategory(true)
-    await createCategory.mutateAsync({
-      name: categoryInfo.categoryName,
-      description: categoryInfo.description,
+    if (!paymentInfo.name) return alert('Digite o nome do pagamento.')
+      if (typeof paymentInfo.value !== 'number') return alert('Digite a taxa.')
+    setCreatingPayment(true)
+    await createPayment.mutateAsync({
+      name: paymentInfo.name,
+      value: paymentInfo.value,
     })
-    setCreatingCategory(false)
+    setCreatingPayment(false)
     setSuccess(true)
-    setCategoryInfo({
-      categoryName: '',
-      description: '',
+    setPaymentInfo({
+      name: '',
+      value: 0,
     })
     setTimeout(() => {
-      setSuccess(false)
+        setSuccess(false)
     }, 1500)
   }
 
@@ -97,10 +94,10 @@ const Form: React.FC = () => {
       <FlexRow gap='20px' verticalAlign='flex-start'>
         <FlexColumn width='100%' verticalAlign='flex-start'>
           <CLText
-            label='Nome da categoria.'
-            placeholder='Nome da categoria.'
-            value={categoryInfo.categoryName}
-            onChange={(e) => setCategoryInfo({ ...categoryInfo, categoryName: e.target.value })}
+            label='Nome do método de pagamento.'
+            placeholder='Nome do método de pagamento.'
+            value={paymentInfo.name}
+            onChange={(e) => setPaymentInfo({ ...paymentInfo, name: e.target.value })}
             required
           />
         </FlexColumn>
@@ -108,25 +105,25 @@ const Form: React.FC = () => {
 
       <FlexRow gap='20px' verticalAlign='flex-start'>
         <FlexColumn width='100%' verticalAlign='flex-start'>
-          <CLText
-            label='Descrição'
-            placeholder='Informação extra. Ex: tipos de produtos, etc.'
-            value={categoryInfo.description}
-            onChange={(e) => setCategoryInfo({ ...categoryInfo, description: e.target.value })}
-            required
+          <CLCurrencyInput
+            label='Taxa'
+            placeholder='Custo por transação.'
+            currencyValue={paymentInfo.value}
+            setCurrencyValue={(value) => setPaymentInfo({ ...paymentInfo, value: value })}
           />
         </FlexColumn>
       </FlexRow>
-      <FormError isError={!!createCategory.error} message={createCategory.error?.message} />
+      
+      <FormError isError={!!createPayment.error} message={createPayment.error?.message} />
       <FlexRow>
-        {creatingCategory ? (
+        {creatingPayment ? (
           <LoadingZero />
         ) : success ? (
           <DefaultText color='primary-500'>
-            Categoria cadastrada com sucesso!
+            Pagamento cadastrado com sucesso!
           </DefaultText>
         ) : (
-          <FormButton type='submit'>Cadastrar Categoria</FormButton>
+          <FormButton type='submit'>Cadastrar Pagamento</FormButton>
         )}
       </FlexRow>
     </form>

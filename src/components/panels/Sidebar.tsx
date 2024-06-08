@@ -78,6 +78,7 @@ const SidebarDesktopContent: React.FC = () => {
             `${basePath}/colecoes`,
             `${basePath}/grupos`,
             `${basePath}/produtos`,
+            `${basePath}/pagamentos`,
           ]}
         >
           <MenuLink
@@ -105,6 +106,13 @@ const SidebarDesktopContent: React.FC = () => {
             label='Produtos'
             icon={<CardIcon />}
             active={router.pathname.includes(`${basePath}/produtos`)}
+          />
+
+          <MenuLink
+            href={`${basePath}/pagamentos`}
+            label='Pagamentos'
+            icon={<CardIcon />}
+            active={router.pathname.includes(`${basePath}/pagamentos`)}
           />
         </LinkGroup>
 

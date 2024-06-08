@@ -22,7 +22,7 @@ model user {
 model category {
     id          Int       @id @default(autoincrement())
     name        String    @unique
-    description String
+    description String @db.Text
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
     public      Boolean   @default(false)
@@ -34,20 +34,23 @@ model category {
 model product {
     id          Int              @id @default(autoincrement())
     name        String           @unique
-    price       Decimal
-    description String
+    price       Decimal @db.Decimal(10,3)
+    description String @db.Text
     quantity    Int
     available   Boolean          @default(false)
     images      product_images[]
     createdAt   DateTime         @default(now())
     updatedAt   DateTime         @updatedAt
-    cost        Decimal          @default(0)
+    cost        Decimal          @default(0) @db.Decimal(10,3)
     category    category         @relation(fields: [categoryId], references: [id], onDelete: Restrict)
     categoryId  Int
     code        String           @unique
-    profit      Decimal          @default(0)
+    profit      Decimal          @default(0) @db.Decimal(10,3)
     collections collection[]
     orders      order[]
+    @@index([code])
+    @@index([categoryId])
+
 }
 
 model product_images {
@@ -78,7 +81,7 @@ model business {
 model collection {
     id          Int       @id @default(autoincrement())
     name        String    @unique
-    description String
+    description String @db.Text
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
     public      Boolean   @default(false)
@@ -100,7 +103,7 @@ model ErrorLogs {
 model groups {
     id          Int      @id @default(autoincrement())
     name        String   @unique
-    description String
+    description String   @default("Selecione uma descrição")
     createdAt   DateTime @default(now())
     phone       String   @default("Edite este número")
     updatedAt   DateTime @updatedAt
@@ -115,9 +118,10 @@ model order {
     products        product[]
     group           groups?         @relation(fields: [groupId], references: [id])
     groupId         Int?
-    total           Decimal
+    total           Decimal @db.Decimal(10,3)
     paymentMethod   payment_methods @relation(fields: [paymentMethodId], references: [id])
     paymentMethodId Int
+    paid            Boolean         @default(false)
 }
 
 model payment_methods {
@@ -125,7 +129,8 @@ model payment_methods {
     name      String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    taxRate       Decimal
+    taxRate   Decimal @db.Decimal(10,3)
+    enabled   Boolean  @default(true)
 
     order order[]
 }

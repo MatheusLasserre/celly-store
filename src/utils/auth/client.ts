@@ -23,6 +23,6 @@ export const checkAuth = () => {
     })
 
     if(userData.data?.user) {
-        router.push('/app')
+        router.push('/admin')
     }
 }

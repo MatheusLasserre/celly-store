@@ -73,9 +73,14 @@ const Form: React.FC = () => {
     })
     setCreatingCollection(false)
     setSuccess(true)
+    setCollectionInfo({
+      collectionName:'',
+      description:'',
+    })
+
     setTimeout(() => {
-      router.push('/admin/colecoes')
-    }, 3000)
+      setSuccess(false)
+    }, 1500)
   }
 
   return (
@@ -121,7 +126,7 @@ const Form: React.FC = () => {
           <LoadingZero />
         ) : success ? (
           <DefaultText color='primary-500'>
-            Coleção cadastrada com sucesso! Redirecionando...
+            Coleção cadastrada com sucesso!
           </DefaultText>
         ) : (
           <FormButton type='submit'>Cadastrar Coleção</FormButton>

@@ -73,6 +73,34 @@ export const groupRouter = createTRPCRouter({
     }
   }),
 
+  getAllGroupsDry: authProcedure.query(async ({ ctx }) => {
+    try {
+      const groups = await ctx.prisma.groups.findMany({
+        include: {
+          _count: {
+            select: {
+              order: true,
+            },
+          },
+        },
+      })
+      return groups.map((group) => ({
+        id: Number(group.id),
+        name: group.name,
+      }))
+    } catch (error) {
+      const errorMessage = getErrorMessage(error)
+
+      await logOnDb(ctx.prisma, {
+        message: 'On group Router. Error on getAllGroupsDry',
+        stack: errorMessage,
+        info: 'getAllGroupsDry',
+        userId: ctx.session.user.id,
+      })
+      throw error
+    }
+  }),
+
   updateGroup: authProcedure
     .input(
       z.object({

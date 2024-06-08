@@ -53,3 +53,36 @@ Notes:
 - Categories are for type of products
 - Codes are for internal organization
 - Customer group are for internal organization
+
+# Relatórios
+ - Perído de Venda
+ - Lista de todos os produtos - número de vendas
+ - Primeira linha: número total de vendas, - lucro total, método de pagamento, taxa total
+
+
+
+# Others
+- Add product to collection
+- - Set collection as featured
+
+# TODO
+
+  > Criar meio de pagamento (valor fixo) DONE
+  > Lançamento de vendas
+    -> Seleciona o grupo de clientes
+    -> Pesquisa por código os produtos
+      -> Seleciona o produto e a quantidade
+    -> Seleciona o pagamento
+    -> Seleciona a data da venda
+    -> Save
+
+  > Relatório
+  > Seleciona o período
+  > Lista de todos os produtos - número de vendas - valor de venda - custo - lucro total - taxa total
+  > Filtros:
+    - Categoria
+    - Grupos
+    - Pagamento
+
+Feito: Selecionar o pagamento from DB, SelectCustomQuery
+  

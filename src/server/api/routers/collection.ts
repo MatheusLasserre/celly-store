@@ -103,6 +103,34 @@ export const collectionRouter = createTRPCRouter({
     }
   }),
 
+  getAllCollectionsDry: authProcedure.query(async ({ ctx }) => {
+    try {
+      const collections = await ctx.prisma.collection.findMany({
+        select: {
+          id: true,
+          name: true,
+        },
+      })
+      return collections.map((collection) => ({
+        id: Number(collection.id),
+        name: collection.name,
+      }))
+    } catch (error) {
+      const errorMessage = getErrorMessage(error)
+
+      await logOnDb(ctx.prisma, {
+        message: 'On collection Router. Error on getAllCollectionsDry',
+        stack: errorMessage,
+        info: 'getAllCollectionsDry',
+        userId: ctx.session?.user.id,
+      })
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Erro ao buscar todas as coleções',
+      })
+    }
+  }),
+
   updateCollection: authProcedure
     .input(
       z.object({

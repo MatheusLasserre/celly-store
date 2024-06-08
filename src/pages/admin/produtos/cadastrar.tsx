@@ -89,9 +89,19 @@ const Form: React.FC = () => {
     })
     setCreatingProduct(false)
     setSuccess(true)
+    setProductInfo({
+      name: '',
+      description: '',
+      price: 0,
+      cost: 0,
+      quantity: 0,
+      code: '',
+      categoryId: 0,
+      available: false,
+    })
     setTimeout(() => {
-      router.push('/admin/produtos')
-    }, 3000)
+      setSuccess(false)
+    }, 1500)
   }
   const categories = api.categories.getAllCategories.useQuery(undefined, {
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -218,7 +228,7 @@ const Form: React.FC = () => {
           <LoadingZero />
         ) : success ? (
           <DefaultText color='primary-500'>
-            Produto cadastrado com sucesso! Redirecionando...
+            Produto cadastrado com sucesso!
           </DefaultText>
         ) : (
           <FormButton type='submit'>Cadastrar Produto</FormButton>

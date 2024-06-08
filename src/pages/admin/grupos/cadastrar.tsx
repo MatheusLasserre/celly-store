@@ -74,9 +74,14 @@ const Form: React.FC = () => {
     })
     setCreatingGroup(false)
     setSuccess(true)
+    setGroupInfo({
+      groupName: '',
+      description: '',
+      phone: '',
+    })
     setTimeout(() => {
-      router.push('/admin/grupos')
-    }, 3000)
+      setSuccess(false)
+    }, 1500)
   }
 
   return (
@@ -131,7 +136,7 @@ const Form: React.FC = () => {
           <LoadingZero />
         ) : success ? (
           <DefaultText color='primary-500'>
-            Cliente cadastrado com sucesso! Redirecionando...
+            Cliente cadastrado com sucesso!
           </DefaultText>
         ) : (
           <FormButton type='submit'>Cadastrar Cliente</FormButton>

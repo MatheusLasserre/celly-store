@@ -30,6 +30,7 @@ type InputProps = {
   onKeyDown?: InputHTMLAttributes<HTMLInputElement>['onKeyDown']
   ref?: ClassAttributes<HTMLInputElement>['ref']
   disabled?: boolean
+  onClick?: InputHTMLAttributes<HTMLInputElement>['onClick']
 }
 
 export const CLabel: React.FC<{
@@ -59,6 +60,7 @@ export const CText = forwardRef<HTMLInputElement, InputProps>(
       id,
       disabled,
       onKeyDown,
+      onClick
     },
     ref,
   ) => {
@@ -77,6 +79,7 @@ export const CText = forwardRef<HTMLInputElement, InputProps>(
           onKeyDown={onKeyDown}
           ref={ref}
           disabled={disabled}
+          onClick={onClick}
         />
       )
     return (
@@ -93,6 +96,7 @@ export const CText = forwardRef<HTMLInputElement, InputProps>(
         onKeyDown={onKeyDown}
         ref={ref}
         disabled={disabled}
+        onClick={onClick}
       />
     )
   },
@@ -100,7 +104,7 @@ export const CText = forwardRef<HTMLInputElement, InputProps>(
 
 export const CPassword = forwardRef<HTMLInputElement, InputProps>(
   (
-    { type, onChange, placeholder, required, value, className, maxLength, name, id, onKeyDown },
+    { type, onChange, placeholder, required, value, className, maxLength, name, id, onKeyDown, onClick },
     ref,
   ) => {
     const [showPassword, setShowPassword] = useState(false)
@@ -116,6 +120,8 @@ export const CPassword = forwardRef<HTMLInputElement, InputProps>(
           name={name}
           id={id}
           className={Style.textInput + ' ' + className}
+          onClick={onClick}
+          onKeyDown={onKeyDown}
         />
         <EyeIcon showPassword={showPassword} setShowPassword={setShowPassword} />
       </div>
@@ -125,7 +131,7 @@ export const CPassword = forwardRef<HTMLInputElement, InputProps>(
 
 export const CPassword2 = forwardRef<HTMLDivElement, InputProps>(
   (
-    { type, onChange, placeholder, required, value, className, maxLength, name, id, onKeyDown },
+    { type, onChange, placeholder, required, value, className, maxLength, name, id, onKeyDown , onClick},
     ref,
   ) => {
     const [showPassword, setShowPassword] = useState(false)
@@ -141,6 +147,8 @@ export const CPassword2 = forwardRef<HTMLDivElement, InputProps>(
           name={name}
           id={id}
           className={Style.textInput + ' ' + className}
+          onClick={onClick}
+          onKeyDown={onKeyDown}
         />
         <EyeIcon showPassword={showPassword} setShowPassword={setShowPassword} />
       </div>
@@ -179,6 +187,7 @@ export const CLText: React.FC<
   id,
   disabled,
   onKeyDown,
+  onClick
 }) => {
   return (
     <label className={labelClassName || Style.label}>
@@ -195,6 +204,7 @@ export const CLText: React.FC<
         className={className}
         disabled={disabled}
         onKeyDown={onKeyDown}
+        onClick={onClick}
       />
     </label>
   )
