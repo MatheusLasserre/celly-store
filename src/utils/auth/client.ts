@@ -19,7 +19,7 @@ export const checkAuth = () => {
     const router = useRouter()
     const userData = api.auth.getSession.useQuery(undefined, {
         refetchOnWindowFocus: false, 
-        retry: 2,
+        retry: 1,
     })
 
     if(userData.data?.user) {

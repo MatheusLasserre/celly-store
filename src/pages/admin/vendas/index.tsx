@@ -38,7 +38,7 @@ const Header: React.FC = () => {
         <StateButton
           type='compact'
           onClick={() => {
-            router.push('/admin/lancamentos/cadastrar')
+            router.push('/admin/vendas/cadastrar')
           }}
         >
           Cadastrar Novo lançamento
