@@ -69,13 +69,18 @@ Notes:
 
   > Criar meio de pagamento (valor fixo) DONE
   > Lançamento de vendas
-    -> Seleciona o grupo de clientes
+    -> Seleciona o grupo de clientes ok
+    -> Seleciona o pagamento ok
+    -> Seleciona a data da venda ok
     -> Pesquisa por código os produtos
-      -> Seleciona o produto e a quantidade
-    -> Seleciona o pagamento
-    -> Seleciona a data da venda
+      -> Seleciona o produto ok
+      -> Adiciona o produto à box abaixo, onde pode mudar a quantidade e ver o total de vendas e n de produtos ok
     -> Save
-
+Missing:
+-> Estilo do seletor de data
+-> Backend para enviar a venda
+-> Talvez trocar a posição da data com o meio de pagamento?
+-> Visualizar a venda em tabela com os mesmos controles que o cadastro
   > Relatório
   > Seleciona o período
   > Lista de todos os produtos - número de vendas - valor de venda - custo - lucro total - taxa total
@@ -85,4 +90,4 @@ Notes:
     - Pagamento
 
 Feito: Selecionar o pagamento from DB, SelectCustomQuery
-  
+  -> Upload de imagem

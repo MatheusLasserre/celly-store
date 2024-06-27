@@ -19,8 +19,8 @@ import { useEffect } from 'react'
  *
  */
 
-type Action = { dataKey: string; action: (data: any) => void }
-type Format = { dataKey: string; format: (data: any) => string | React.ReactNode }
+type Action = { dataKey: string; action: (data: any, rowIndex: number) => void }
+type Format = { dataKey: string; format: (data: any, rowIndex: number) => string | React.ReactNode }
 type Header = { label: string; dataKey: string; width?: string }[]
 type Data = { [key: string]: any }
 type CTableProps = {
@@ -172,7 +172,7 @@ const TableBody: React.FC<TableBodyProps> = ({
   return (
     // <FlexColumn gap='0' margin='10px 0 auto 0' width='fit-content'>
     <tbody className={Style.tbody}>
-      {data.map((item) => (
+      {data.map((item, index) => (
         <TableBodyRow
           key={item.id}
           data={item}
@@ -182,6 +182,7 @@ const TableBody: React.FC<TableBodyProps> = ({
           color={color}
           linkColor={linkColor}
           rowHeight={rowHeight}
+          rowIndex={index}
         />
       ))}
     </tbody>
@@ -197,6 +198,7 @@ type TableBodyRowProps = {
   color: CSS_VARS_OPTIONS
   linkColor: CSS_VARS_OPTIONS
   rowHeight: string
+  rowIndex: number
 }
 const TableBodyRow: React.FC<TableBodyRowProps> = ({
   action,
@@ -206,6 +208,7 @@ const TableBodyRow: React.FC<TableBodyRowProps> = ({
   format,
   linkColor,
   rowHeight,
+  rowIndex
 }) => {
   return (
     // <FlexRow gap='0' height={rowHeight} className={Style.dividerBorder} verticalAlign='center'>
@@ -222,6 +225,7 @@ const TableBodyRow: React.FC<TableBodyRowProps> = ({
             action={actionItem ? actionItem.action : undefined}
             linkColor={linkColor}
             format={formatItem ? formatItem.format : undefined}
+            rowIndex={rowIndex}
           />
         )
       })}
@@ -233,9 +237,10 @@ const TableBodyRow: React.FC<TableBodyRowProps> = ({
 type TableBodyCellProps = {
   value: string | number
   color: CSS_VARS_OPTIONS
-  action?: (value?: string | number) => void
+  action?: (value: string | number, rowIndex: number) => void
   linkColor: CSS_VARS_OPTIONS
-  format?: (value: string | number) => string | React.ReactNode
+  format?: (value: string | number, rowIndex: number) => string | React.ReactNode
+  rowIndex: number
 }
 const TableBodyCell: React.FC<TableBodyCellProps> = ({
   color,
@@ -243,6 +248,7 @@ const TableBodyCell: React.FC<TableBodyCellProps> = ({
   action,
   linkColor,
   format,
+  rowIndex
 }) => {
   return (
     <td
@@ -252,9 +258,10 @@ const TableBodyCell: React.FC<TableBodyCellProps> = ({
         textDecoration: action ? 'underline' : 'none',
       }}
       className={Style.td}
-      onClick={() => action && action(value)}
+      onClick={() => action && action(value, rowIndex)}
+      title={typeof value === 'string' ? value : undefined}
     >
-      {format ? format(value) : value}
+      {format ? format(value, rowIndex) : value}
     </td>
     // </FlexRow>
   )
