@@ -22,7 +22,7 @@ export const groupRouter = createTRPCRouter({
           data: {
             name: input.name,
             description: input.description,
-            phone: input.phone.replace(/[^0-9]/g, ''),
+            phone: input.phone.replace(/[^0-9]/g, '') === '' ? 'Não informado' : input.phone.replace(/[^0-9]/g, ''),
           },
         })
 

@@ -61,6 +61,9 @@ const Form: React.FC = () => {
   const createProduct = api.products.createProduct.useMutation({
     onSuccess: (data) => {
       utils.products.getAllProducts.invalidate()
+      utils.products.getAllProductsSearch.invalidate()
+      utils.products.getAllProductsByCodeSearch.invalidate()
+      utils.products.getAvailableProducts.invalidate()
     },
     onError: () => {
       setCreatingProduct(false)

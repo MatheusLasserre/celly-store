@@ -126,7 +126,7 @@ const Form: React.FC = () => {
             placeholder='número de celular.'
             value={formatPhone(groupInfo.phone)}
             onChange={(e) => setGroupInfo({ ...groupInfo, phone: e.target.value })}
-            required
+            
           />
         </FlexColumn>
       </FlexRow>

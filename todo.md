@@ -91,3 +91,7 @@ Missing:
 
 Feito: Selecionar o pagamento from DB, SelectCustomQuery
   -> Upload de imagem
+
+  -> Ocultar o lucro e o valor (toggle)
+  -> Codigo do lado e antes do nome
+  -> Confirmar delete na tabela

@@ -218,4 +218,63 @@ export const ordersRouter = createTRPCRouter({
         throw error
       }
     }),
+
+  createOrder: authProcedure
+    .input(
+      z.object({
+        groupId: z.number().min(1),
+        paymentMethodId: z.number().min(1),
+        date: z.date(),
+        products: z.array(z.object({
+          id: z.number().min(1),
+          name: z.string(),
+          price: z.number(),
+          cost: z.number(),
+          code: z.string(),
+          profit: z.number(),
+          quantity: z.number(),
+        })),
+      }),
+    ).mutation(async ({ input, ctx }) => {
+      try {
+
+        const total = input.products.reduce((acc, product) => acc + product.quantity * product.price, 0)
+        const profit = input.products.reduce((acc, product) => acc + product.quantity * product.profit, 0)
+        await ctx.prisma.order.create({
+          data: {
+            groupId: input.groupId,
+            paymentMethodId: input.paymentMethodId,
+            orderDate: input.date,
+            paid: true,
+            total: total,
+            profit: profit,
+            products: {
+              create: input.products.map((product) => ({
+                productId: product.id,
+                name: product.name,
+                price: product.price,
+                cost: product.cost,
+                code: product.code,
+                profit: product.profit,
+                quantity: product.quantity,
+              })),
+            },
+          }
+        })
+
+        return {
+          message: 'Ordem criada com sucesso',
+        }
+      } catch (error) {
+        const errorMessage = getErrorMessage(error)
+
+        await logOnDb(ctx.prisma, {
+          message: 'On product Router. Error on createOrder',
+          stack: errorMessage,
+          info: 'createOrder',
+          userId: ctx.session.user.id,
+        })
+        throw error
+      }
+    }),
 })

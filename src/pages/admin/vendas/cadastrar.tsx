@@ -52,65 +52,48 @@ const Header: React.FC = () => {
 }
 
 const Form: React.FC = () => {
-  const router = useRouter()
-  const [productInfo, setProductInfo] = React.useState({
-    name: '',
-    description: '',
-    price: 0,
-    cost: 0,
-    quantity: 0,
-    code: '',
-    categoryId: 0,
-    available: false,
-  })
-  const [creatingProduct, setCreatingProduct] = React.useState(false)
+  
+  const [creatingOrder, setCreatingOrder] = React.useState(false)
   const [success, setSuccess] = React.useState(false)
 
   const utils = api.useUtils()
-  const createProduct = api.products.createProduct.useMutation({
+  const createOrder = api.orders.createOrder.useMutation({
     onSuccess: (data) => {
-      utils.products.getAllProducts.invalidate()
+      utils.orders.getAllOrders.invalidate()
+      utils.orders.getAllOrdersSearch.invalidate()
     },
     onError: () => {
-      setCreatingProduct(false)
+      setCreatingOrder(false)
     },
   })
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!productInfo.name) return alert('Digite o nome do produto.')
-    if (!productInfo.description) return alert('Digite a descrição.')
-    if (!productInfo.price) return alert('Digite o preço.')
-    if (!productInfo.cost) return alert('Digite o valor de compra.')
-    if (!productInfo.quantity) return alert('Digite o estoque.')
-    if (!productInfo.code) return alert('Digite o código.')
-    if (!productInfo.categoryId) return alert('Selecione a categoria.')
+    
 
-    setCreatingProduct(true)
-    await createProduct.mutateAsync({
-      name: productInfo.name,
-      description: productInfo.description,
-      price: productInfo.price,
-      cost: productInfo.cost,
-      quantity: productInfo.quantity,
-      code: productInfo.code,
-      categoryId: productInfo.categoryId,
-      available: productInfo.available,
+    setCreatingOrder(true)
+    await createOrder.mutateAsync({
+      groupId: Number(groupInfo.id),
+      paymentMethodId: Number(paymentMethodId),
+      date: date,
+      products: productArray,
     })
-    setCreatingProduct(false)
+    setCreatingOrder(false)
     setSuccess(true)
-    setProductInfo({
-      name: '',
-      description: '',
-      price: 0,
-      cost: 0,
-      quantity: 0,
-      code: '',
-      categoryId: 0,
-      available: false,
-    })
+    handleReset()
     setTimeout(() => {
       setSuccess(false)
     }, 1500)
+  }
+
+  const handleReset = () => {
+    setCreatingOrder(false)
+    setGroupInfo({
+      id: 0,
+      name: '',
+    })
+    setPaymentMethodId(0)
+    setDate(new Date())
+    setProductsArray([])
   }
 
   // Select Group
@@ -282,6 +265,7 @@ const Form: React.FC = () => {
 
       <FlexRow gap='20px' verticalAlign='flex-start'>
         <FlexColumn width='100%' verticalAlign='flex-start'>
+          <CLabel label='Data da venda'></CLabel>
           <DateSelection date={date} setDate={setDate} />
         </FlexColumn>
       </FlexRow>
@@ -370,14 +354,14 @@ const Form: React.FC = () => {
         </FlexColumn>
       </FlexRow>
 
-      <FormError isError={!!createProduct.error} message={createProduct.error?.message} />
+      <FormError isError={!!createOrder.error} message={createOrder.error?.message} />
       <FlexRow>
-        {creatingProduct ? (
+        {creatingOrder ? (
           <LoadingZero />
         ) : success ? (
-          <DefaultText color='primary-500'>Produto cadastrado com sucesso!</DefaultText>
+          <DefaultText color='primary-500'>Venda cadastrada com sucesso!</DefaultText>
         ) : (
-          <FormButton type='submit'>Cadastrar Produto</FormButton>
+          <FormButton type='submit'>Cadastrar Venda</FormButton>
         )}
       </FlexRow>
     </form>
