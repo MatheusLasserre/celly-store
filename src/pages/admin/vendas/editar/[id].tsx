@@ -3,31 +3,33 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { ContentLayout } from '~/components/layouts/Layouts'
 import { BackButton, FormButton } from '~/components/utils/Buttons'
-import { SelectIntCustom } from '~/components/utils/CustomInputs'
-import { DefaultText, HeadlineText, SubHeadlineText } from '~/components/utils/Headers'
 import {
+  DateSelection,
+  SelectCustomQuery,
+  SelectIntCustom,
+} from '~/components/utils/CustomInputs'
+import { DefaultText, HeadlineText, SubHeadlineText } from '~/components/utils/Headers'
+import { CrossIcon } from '~/components/utils/Icons'
+import {
+  CFalseText,
   CLabel,
-  CLCurrencyInput,
-  CLRadio,
-  CLSelectString,
-  CLText,
   FormError,
 } from '~/components/utils/Inputs'
 import { LoadingZero } from '~/components/utils/Loading'
-import { FlexColumn, FlexRow, LoadingWrapper } from '~/components/utils/Utils'
+import { CTable } from '~/components/utils/Table'
+import { FlexColumn, FlexRow } from '~/components/utils/Utils'
 import { api } from '~/utils/api'
+import { FormatNumberMask } from '~/utils/formating/credentials'
 import ErrorPage from 'next/error'
-import { undefinedIfEqual } from '~/utils/utils'
 
-export const Editar: NextPage = () => {
+export const Cadastrar: NextPage = () => {
   const router = useRouter()
   const { id } = router.query
   if (typeof id !== 'string' && typeof id !== 'undefined') {
     return <ErrorPage statusCode={404} />
   }
-
-  const productInfo = api.products.getProductById.useQuery(
-    { productId: Number(id) },
+  const orderInfo = api.orders.getOrderById.useQuery(
+    { orderId: Number(id) },
     {
       enabled: typeof id === 'string',
       refetchOnWindowFocus: false,
@@ -36,107 +38,219 @@ export const Editar: NextPage = () => {
   return (
     <ContentLayout>
       <Header />
-      <LoadingWrapper loading={productInfo.isFetching || productInfo.isLoading}>
-        {productInfo.data && (
+      {
+        orderInfo.data ? (
           <Form
-            description={productInfo.data.description}
-            categoryId={productInfo.data.id}
-            name={productInfo.data.name}
-            available={productInfo.data.available}
-            code={productInfo.data.code}
-            cost={productInfo.data.cost}
-            price={productInfo.data.price}
-            quantity={productInfo.data.quantity}
-            productId={productInfo.data.id}
+            orderId={orderInfo.data.id}
+            groupId={orderInfo.data.groupId}
+            groupName={orderInfo.data.groupName}
+            paymentMethodId={orderInfo.data.paymentMethodId}
+            date={orderInfo.data.orderDate}
+            products={orderInfo.data.products}
           />
-        )}
-      </LoadingWrapper>
+        )
+        :
+        <LoadingZero />
+      }
+     
     </ContentLayout>
   )
 }
 
-export default Editar
+export default Cadastrar
 
 const Header: React.FC = () => {
   return (
     <FlexColumn>
       <FlexColumn maxWidth='600px' margin='0 0 30px 0'>
         <BackButton />
-        <HeadlineText>Editar Produto</HeadlineText>
+        <HeadlineText>Editar venda</HeadlineText>
         <SubHeadlineText>
-          Modifique as informações abaixo e clique em salvar para editar sua informações.
+          Altere as informações abaixo e clique em salvar para editar sua informações.
         </SubHeadlineText>
       </FlexColumn>
     </FlexColumn>
   )
 }
 type FormProps = {
-  productId: number
-  name: string
-  description: string
-  price: number
-  cost: number
-  quantity: number
-  code: string
-  categoryId: number
-  available: boolean
+  orderId: number
+  groupId: number
+  groupName: string
+  paymentMethodId: number
+  date: Date
+  products:  {
+    id: number
+    name: string
+    price: number
+    cost: number
+    code: string
+    quantity: number
+    profit: number
+    productId: number
+  }[]
 }
 const Form: React.FC<FormProps> = ({
-  productId,
-  description,
-  name,
-  price,
-  cost,
-  quantity,
-  code,
-  categoryId,
-  available,
+  orderId,
+  groupId,
+  paymentMethodId,
+  date,
+  products,
+  groupName
+
 }) => {
-  const [productInfo, setProductInfo] = React.useState({
-    name: name,
-    description: description,
-    price: price,
-    cost: cost,
-    quantity: quantity,
-    code: code,
-    categoryId: categoryId,
-    available: available,
-  })
-  const [creatingProduct, setCreatingProduct] = React.useState(false)
+ 
+  const [editingOrder, setEditingOrder] = React.useState(false)
+  const [success, setSuccess] = React.useState(false)
+
+
 
   const utils = api.useUtils()
-  const updateProduct = api.products.updateProduct.useMutation({
-    onSuccess: () => {
-      utils.products.getAllProducts.invalidate()
-      utils.products.getProductById.invalidate({ productId: categoryId })
+  const editOrder = api.orders.editOrder.useMutation({
+    onSuccess: (data) => {
+      utils.orders.getAllOrders.invalidate()
+      utils.orders.getAllOrdersSearch.invalidate()
+      utils.orders.getOrderById.invalidate({ orderId: orderId })
     },
     onError: () => {
-      setCreatingProduct(false)
+      setEditingOrder(false)
     },
   })
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!productInfo.name) return alert('Nome da categoria não pode estar vazio.')
-    if (!productInfo.description) return alert('Descrição não pode estar vazia.')
-    setCreatingProduct(true)
-    await updateProduct.mutateAsync({
-      name: undefinedIfEqual(productInfo.name, name),
-      description: undefinedIfEqual(productInfo.description, description),
-      price: undefinedIfEqual(productInfo.price, price),
-      cost: undefinedIfEqual(productInfo.cost, cost),
-      quantity: undefinedIfEqual(productInfo.quantity, quantity),
-      code: undefinedIfEqual(productInfo.code, code),
-      categoryId: categoryId,
-      available: undefinedIfEqual(productInfo.available, available),
-      id: productId,
+    
+
+    setEditingOrder(true)
+    await editOrder.mutateAsync({
+      orderId: Number(orderId),
+      groupId: Number(groupInfoEdit.id),
+      paymentMethodId: Number(paymentMethodIdEdit),
+      date: dateEdit,
+      products: productArray,
     })
-    setCreatingProduct(false)
+    setEditingOrder(false)
+    setSuccess(true)
+    setTimeout(() => {
+      setSuccess(false)
+    }, 1500)
   }
 
-  const categories = api.categories.getAllCategories.useQuery(undefined, {
-    staleTime: 1000 * 60 * 5, // 5 minutes
+  // Select Group
+  const [groupInfoEdit, setGroupInfoEdit] = React.useState<{
+    id: number
+    name: string
+  }>({
+    id: groupId,
+    name: groupName,
+  })
+  const [query, setQuery] = React.useState('')
+  const [queryTrigger, setQueryTrigger] = React.useState('')
+  const groupList = api.groups.getAllGroupsDrySearch.useQuery(
+    {
+      query: query,
+    },
+    {
+      refetchOnWindowFocus: false,
+    },
+  )
+  const [timeouts, setTimeouts] = React.useState<NodeJS.Timeout[]>([])
+  const handleSetQuery = (text: string) => {
+    setQueryTrigger(text)
+    timeouts.forEach((timeout) => clearTimeout(timeout))
+    const timeOut = setTimeout(() => {
+      setQuery(text)
+    }, 300)
+    setTimeouts([timeOut])
+  }
+  const handleSetGroupById = (id: number) => {
+    const group = groupList.data?.find((group) => group.id === id)
+    if (!group) return
+    setGroupInfoEdit({
+      id: group.id,
+      name: group.name,
+    })
+  }
+
+  //Select PaymentMethod
+  const [paymentMethodIdEdit, setPaymentMethodIdEdit] = React.useState<number>(paymentMethodId)
+  const paymentMethods = api.payments.getAvailablePayments.useQuery(undefined, {
     refetchOnWindowFocus: false,
   })
+
+  // Select Date
+  const [dateEdit, setDateEdit] = React.useState<Date>(date)
+
+  // Select Products
+  type Product = {
+    id?: number
+    name: string
+    price: number
+    cost: number
+    code: string
+    quantity: number
+    profit: number
+    productId: number
+  }
+  const [productsQuery, setProductsQuery] = React.useState('')
+  const [productsQueryTrigger, setProductsQueryTrigger] = React.useState('')
+  const [productArray, setProductsArray] = React.useState<Product[]>(products)
+  const productsList = api.products.getAllProductsByCodeSearch.useQuery(
+    {
+      query: productsQuery,
+    },
+    {
+      refetchOnWindowFocus: false,
+    },
+  )
+  const [productsTimeouts, setProductsTimeouts] = React.useState<NodeJS.Timeout[]>([])
+  const handleSetProductsQuery = (text: string) => {
+    setProductsQueryTrigger(text)
+    productsTimeouts.forEach((timeout) => clearTimeout(timeout))
+    const timeOut = setTimeout(() => {
+      setProductsQuery(text)
+    }, 300)
+    setProductsTimeouts([timeOut])
+  }
+  const handleSetProductById = (id: number) => {
+    const product = productsList.data?.products.find((product) => product.id === id)
+    if (!product) return
+    setProductsArray([
+      ...productArray,
+      {
+        name: product.name,
+        price: product.price,
+        cost: product.cost,
+        code: product.code,
+        profit: product.profit,
+        quantity: 1,
+        productId: product.id,
+      },
+    ])
+  }
+  const handleRemoveProduct = (productId: number) => {
+    const product = productArray.find((product) => product.productId === productId)
+    if (!product) return
+    setProductsArray(productArray.filter((product) => product.productId !== productId))
+  }
+
+  const handleSetProductQuantity = (index: number, quantity: number) => {
+    const product = productArray[index]
+    if (!product) {
+      console.log('Erro ao alterar quantidade', index, quantity, productArray)
+      return
+    }
+    console.log('product', productArray)
+    setProductsArray((prev) =>
+      prev.map((product, idx) => {
+        if (idx === index) {
+          return {
+            ...product,
+            quantity: quantity,
+          }
+        }
+        return product
+      }),
+    )
+  }
   const quantityOptions = Array.from({ length: 100 }, (_, i) => {
     return { value: i + 1 }
   })
@@ -148,111 +262,145 @@ const Form: React.FC<FormProps> = ({
         display: 'flex',
         flexDirection: 'column',
         gap: '20px',
+        minWidth: '340px',
+        width: '100%',
+        maxWidth: '800px',
       }}
     >
       <FlexRow gap='20px' verticalAlign='flex-start'>
-        <FlexColumn width='100%' verticalAlign='flex-start'>
-          <CLText
-            label='Nome do produto.'
-            placeholder='Nome do produto.'
-            value={productInfo.name}
-            onChange={(e) => setProductInfo({ ...productInfo, name: e.target.value })}
-            required
-          />
+        <FlexColumn width='50%' verticalAlign='flex-start'>
+          <CLabel label='Cliente'>
+            {groupInfoEdit.id > 0 ? (
+              <CFalseText text={groupInfoEdit.name} onClick={() => setGroupInfoEdit({ id: 0, name: '' })} />
+            ) : (
+              <SelectCustomQuery
+                data={groupList.data}
+                labelKey='name'
+                label='Buscar'
+                query={queryTrigger}
+                setQuery={handleSetQuery}
+                setValue={handleSetGroupById}
+                valueKey='id'
+              />
+            )}
+          </CLabel>
+        </FlexColumn>
+        <FlexColumn width='50%' verticalAlign='flex-start'>
+          <CLabel label='Meio de Pagamento'>
+            <SelectIntCustom
+              SelectConfig={{
+                options: paymentMethods.data || [],
+                nameKey: 'name',
+                optionValueKey: 'id',
+              }}
+              setCurrentSelected={(value) => setPaymentMethodIdEdit(value)}
+              defaultValue={0}
+              selectedValue={paymentMethodIdEdit}
+            />
+          </CLabel>
         </FlexColumn>
       </FlexRow>
 
       <FlexRow gap='20px' verticalAlign='flex-start'>
         <FlexColumn width='100%' verticalAlign='flex-start'>
-          <CLText
-            label='Descrição'
-            placeholder='Informação extra. Ex: tipos de produtos, etc.'
-            value={productInfo.description}
-            onChange={(e) => setProductInfo({ ...productInfo, description: e.target.value })}
-            required
-          />
+          <CLabel label='Data da venda'></CLabel>
+          <DateSelection date={dateEdit} setDate={setDateEdit} />
         </FlexColumn>
       </FlexRow>
+
       <FlexRow gap='20px' verticalAlign='flex-start'>
-        <FlexColumn width='50%' verticalAlign='flex-start'>
-          <CLCurrencyInput
-            label='Valor de compra'
-            placeholder='Custo do produto.'
-            currencyValue={productInfo.cost}
-            setCurrencyValue={(value) => setProductInfo({ ...productInfo, cost: value })}
-          />
-        </FlexColumn>
-        <FlexColumn width='50%' verticalAlign='flex-start'>
-          <CLCurrencyInput
-            label='Valor de venda'
-            placeholder='Valor de venda do produto.'
-            currencyValue={productInfo.price}
-            setCurrencyValue={(value) => setProductInfo({ ...productInfo, price: value })}
-          />
-        </FlexColumn>
-      </FlexRow>
-      <FlexRow gap='20px' verticalAlign='flex-start'>
-        <FlexColumn width='50%' verticalAlign='flex-start'>
-          <CLabel label='Estoque'>
-            <SelectIntCustom
-              SelectConfig={{
-                options: quantityOptions,
-                nameKey: 'value',
-                optionValueKey: 'value',
-              }}
-              setCurrentSelected={(value) => setProductInfo({ ...productInfo, quantity: value })}
-              selectedValue={productInfo.quantity}
+        <FlexColumn width='100%' verticalAlign='flex-start'>
+          <CLabel label='Produtos'>
+            <SelectCustomQuery
+              data={productsList.data?.products.filter(product => !productArray.some(p => p.productId === product.id))}
+              labelKey='name'
+              label='Buscar por código'
+              query={productsQueryTrigger}
+              setQuery={handleSetProductsQuery}
+              setValue={handleSetProductById}
+              valueKey='id'
+              infoKey='code'
             />
           </CLabel>
         </FlexColumn>
-        <FlexColumn width='50%' verticalAlign='flex-start'>
-          {categories.data && (
-            <CLabel label='Categoria'>
-              <SelectIntCustom
-                SelectConfig={{
-                  options: categories.data,
-                  nameKey: 'name',
-                  optionValueKey: 'id',
-                }}
-                setCurrentSelected={(value) =>
-                  setProductInfo({ ...productInfo, categoryId: value })
-                }
-                selectedValue={productInfo.categoryId}
-              />
-            </CLabel>
-          )}
-        </FlexColumn>
       </FlexRow>
+
       <FlexRow gap='20px' verticalAlign='flex-start'>
-        <FlexColumn width='50%' verticalAlign='flex-start'>
-          <CLText
-            label='Código'
-            placeholder='Código do produto.'
-            value={productInfo.code}
-            onChange={(e) => setProductInfo({ ...productInfo, code: e.target.value })}
-            required
+        <FlexColumn width='100%' verticalAlign='flex-start'>
+          <CTable
+            data={productArray}
+            header={[
+              { dataKey: 'name', label: 'Produto' },
+              { dataKey: 'code', label: 'Código' },
+              { dataKey: 'price', label: 'Preço' },
+              { dataKey: 'profit', label: 'Lucro' },
+              { dataKey: 'quantity', label: 'Quantidade' },
+              { dataKey: 'productId', label: 'Ações' },
+            ]}
+            formats={[
+              {
+                dataKey: 'name',
+                format(data: string) {
+                  return data.length > 60 ? data.slice(0, 60) + '...' : data
+                },
+              },
+              {
+                dataKey: 'quantity',
+                format(data: number, rowIndex) {
+                  return (
+                    <SelectIntCustom
+                      SelectConfig={{
+                        options: quantityOptions,
+                        nameKey: 'value',
+                        optionValueKey: 'value',
+                      }}
+                      setCurrentSelected={(value) => handleSetProductQuantity(rowIndex, value)}
+                      defaultValue={0}
+                      selectedValue={data}
+                    />
+                  )
+                },
+              },
+              {
+                dataKey: 'profit',
+                format(data: number) {
+                  return FormatNumberMask(data)
+                },
+              },
+              {
+                dataKey: 'price',
+                format(data: number) {
+                  return FormatNumberMask(data)
+                },
+              },
+              {
+                dataKey: 'productId',
+                format() {
+                  return <CrossIcon width={16} color='white-90' />
+                },
+              },
+            ]}
+            actions={[
+              {
+                action(data: number) {
+                  handleRemoveProduct(data)
+                },
+                dataKey: 'productId',
+              },
+            ]}
           />
         </FlexColumn>
-        <FlexColumn width='50%' verticalAlign='flex-start'>
-          <CLabel label='Deseja tornar esse produto disponível?'>
-            <FlexRow verticalAlign='center' horizontalAlign='center' height='50px' width='180px'>
-              <CLRadio
-                label='Sim'
-                selected={productInfo.available}
-                setSelected={() => setProductInfo({ ...productInfo, available: true })}
-              />
-              <CLRadio
-                label='Não'
-                selected={!productInfo.available}
-                setSelected={() => setProductInfo({ ...productInfo, available: false })}
-              />
-            </FlexRow>
-          </CLabel>
-        </FlexColumn>
       </FlexRow>
-      <FormError isError={updateProduct.isError} message={updateProduct.error?.message} />
+
+      <FormError isError={!!editOrder.error} message={editOrder.error?.message} />
       <FlexRow>
-        {creatingProduct ? <LoadingZero /> : <FormButton type='submit'>Salvar</FormButton>}
+        {editingOrder ? (
+          <LoadingZero />
+        ) : success ? (
+          <DefaultText color='primary-500'>Venda cadastrada com sucesso!</DefaultText>
+        ) : (
+          <FormButton type='submit'>Cadastrar Venda</FormButton>
+        )}
       </FlexRow>
     </form>
   )

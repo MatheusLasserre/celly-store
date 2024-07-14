@@ -1,12 +1,10 @@
 import { NextPage } from 'next'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { ContentLayout } from '~/components/layouts/Layouts'
 import { BackButton, FormButton } from '~/components/utils/Buttons'
 import {
   DateSelection,
   SelectCustomQuery,
-  SelectInt,
   SelectIntCustom,
 } from '~/components/utils/CustomInputs'
 import { DefaultText, HeadlineText, SubHeadlineText } from '~/components/utils/Headers'
@@ -14,10 +12,6 @@ import { CrossIcon } from '~/components/utils/Icons'
 import {
   CFalseText,
   CLabel,
-  CLCurrencyInput,
-  CLRadio,
-  CLSelectString,
-  CLText,
   FormError,
 } from '~/components/utils/Inputs'
 import { LoadingZero } from '~/components/utils/Loading'

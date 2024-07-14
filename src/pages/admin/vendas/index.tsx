@@ -125,7 +125,7 @@ const OrdersList: React.FC = () => {
           actions={[
             {
               action(data: number) {
-                router.push(`/admin/produtos/editar/${data}`)
+                router.push(`/admin/vendas/editar/${data}`)
               },
               dataKey: 'id',
             },

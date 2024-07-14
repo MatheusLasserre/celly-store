@@ -80,6 +80,7 @@ export const ordersRouter = createTRPCRouter({
             paymentMethodId: true,
             paid: true,
             total: true,
+            orderDate: true,
             products: {
               select: {
                 id: true,
@@ -89,6 +90,7 @@ export const ordersRouter = createTRPCRouter({
                 code: true,
                 cost: true,
                 profit: true,
+                productId: true,
               },
             },
           },
@@ -113,6 +115,7 @@ export const ordersRouter = createTRPCRouter({
           paymentMethodId: order.paymentMethodId,
           paid: order.paid,
           total: order.total,
+          orderDate: order.orderDate,
           products: order.products.map((product) => ({
             id: Number(product.id),
             name: product.name,
@@ -121,6 +124,7 @@ export const ordersRouter = createTRPCRouter({
             cost: Number(product.cost),
             profit: Number(product.profit),
             quantity: product.quantity,
+            productId: product.productId,
           })),
         }
       } catch (error) {
@@ -165,6 +169,7 @@ export const ordersRouter = createTRPCRouter({
             paymentMethodId: true,
             paid: true,
             total: true,
+            profit: true,
             products: {
               select: {
                 id: true,
@@ -202,7 +207,7 @@ export const ordersRouter = createTRPCRouter({
             paid: order.paid,
             total: order.total,
             productsCount: order.products.reduce((acc, product) => acc + product.quantity, 0),
-            profit: order.products.reduce((acc, product) => acc + Number(product.profit), 0),
+            profit: order.profit,
           })),
           nextPage: orders.length > limit ? true : false,
         }
@@ -225,21 +230,37 @@ export const ordersRouter = createTRPCRouter({
         groupId: z.number().min(1),
         paymentMethodId: z.number().min(1),
         date: z.date(),
-        products: z.array(z.object({
-          id: z.number().min(1),
-          name: z.string(),
-          price: z.number(),
-          cost: z.number(),
-          code: z.string(),
-          profit: z.number(),
-          quantity: z.number(),
-        })),
+        products: z.array(
+          z.object({
+            id: z.number().min(1),
+            name: z.string(),
+            price: z.number(),
+            cost: z.number(),
+            code: z.string(),
+            profit: z.number(),
+            quantity: z.number(),
+          }),
+        ),
       }),
-    ).mutation(async ({ input, ctx }) => {
+    )
+    .mutation(async ({ input, ctx }) => {
       try {
-
-        const total = input.products.reduce((acc, product) => acc + product.quantity * product.price, 0)
-        const profit = input.products.reduce((acc, product) => acc + product.quantity * product.profit, 0)
+        const paymentMethodTax = await ctx.prisma.payment_methods.findUnique({
+          where: {
+            id: input.paymentMethodId,
+          },
+          select: {
+            taxRate: true,
+          },
+        })
+        if (!paymentMethodTax) throw new Error('Erro ao buscar o meio de pagamento')
+        const total = input.products.reduce(
+          (acc, product) => acc + product.quantity * product.price,
+          0,
+        )
+        const profit =
+          input.products.reduce((acc, product) => acc + product.quantity * product.profit, 0) -
+          Number(paymentMethodTax.taxRate)
         await ctx.prisma.order.create({
           data: {
             groupId: input.groupId,
@@ -259,11 +280,136 @@ export const ordersRouter = createTRPCRouter({
                 quantity: product.quantity,
               })),
             },
-          }
+          },
         })
 
         return {
           message: 'Ordem criada com sucesso',
+        }
+      } catch (error) {
+        const errorMessage = getErrorMessage(error)
+
+        await logOnDb(ctx.prisma, {
+          message: 'On product Router. Error on createOrder',
+          stack: errorMessage,
+          info: 'createOrder',
+          userId: ctx.session.user.id,
+        })
+        throw error
+      }
+    }),
+
+  editOrder: authProcedure
+    .input(
+      z.object({
+        orderId: z.number().min(1),
+        groupId: z.number().min(1),
+        paymentMethodId: z.number().min(1),
+        date: z.date(),
+        products: z.array(
+          z.object({
+            id: z.number().optional(),
+            name: z.string(),
+            price: z.number(),
+            cost: z.number(),
+            code: z.string(),
+            profit: z.number(),
+            quantity: z.number(),
+            productId: z.number(),
+          }),
+        ),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const paymentMethodTax = await ctx.prisma.payment_methods.findUnique({
+          where: {
+            id: input.paymentMethodId,
+          },
+          select: {
+            taxRate: true,
+          },
+        })
+        if (!paymentMethodTax) throw new Error('Erro ao buscar o meio de pagamento')
+        const total = input.products.reduce(
+          (acc, product) => acc + product.quantity * product.price,
+          0,
+        )
+        console.log(input.products.reduce((acc, product) => acc + product.quantity * product.profit, 0) - Number(paymentMethodTax.taxRate))
+        const profit =
+          input.products.reduce((acc, product) => acc + product.quantity * product.profit, 0) -
+          Number(paymentMethodTax.taxRate)
+        const newOrder = await ctx.prisma.order.update({
+          where: {
+            id: input.orderId,
+          },
+          data: {
+            groupId: input.groupId,
+            paymentMethodId: input.paymentMethodId,
+            orderDate: input.date,
+            paid: true,
+            total: total,
+            profit: profit,
+          },
+          select: {
+            products: true,
+          },
+        })
+
+        const productsToRemove = newOrder.products.filter(
+          (product) => !input.products.some((p) => p.id === product.id),
+        )
+        const productsToAdd = input.products.filter(
+          (product) => !newOrder.products.some((p) => p.id === product.id),
+        )
+        const productsToUpdate = input.products.filter((product) =>
+          newOrder.products.some((p) => p.id === product.id),
+        )
+        if (productsToRemove.length > 0) {
+          await ctx.prisma.product_order.deleteMany({
+            where: {
+              id: {
+                in: productsToRemove.map((product) => product.id),
+              },
+            },
+          })
+        }
+        if (productsToAdd.length > 0) {
+          await ctx.prisma.product_order.createMany({
+            data: productsToAdd.map((product) => ({
+              productId: product.productId,
+              orderId: input.orderId,
+              name: product.name,
+              price: product.price,
+              cost: product.cost,
+              code: product.code,
+              profit: product.profit,
+              quantity: product.quantity,
+            })),
+          })
+        }
+
+        for (let i = 0; i < productsToUpdate.length; i++) {
+          const product = productsToUpdate[i]
+          if (!product) continue
+          await ctx.prisma.product_order.update({
+            where: {
+              id: product.id,
+            },
+            data: {
+              name: product.name,
+              price: product.price,
+              cost: product.cost,
+              code: product.code,
+              profit: product.profit,
+              quantity: product.quantity,
+              productId: product.productId,
+            },
+          })
+        }
+
+        return {
+          message: 'Ordem editada com sucesso',
         }
       } catch (error) {
         const errorMessage = getErrorMessage(error)
