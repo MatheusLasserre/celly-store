@@ -95,3 +95,20 @@ Feito: Selecionar o pagamento from DB, SelectCustomQuery
   -> Ocultar o lucro e o valor (toggle)
   -> Codigo do lado e antes do nome
   -> Confirmar delete na tabela
+  -> Adicionar produto à coleção
+
+  -> Homepage
+  -> Top bar
+  -> carrossel de categorias
+  -> sidebar com categorias e coleções
+  -> lista de produtos com filtros em query string:
+    - categoria
+    - coleção
+    - search
+    - price sort
+
+
+##
+
+-> Criar os inputs dos filtros
+-> Modificar inputs para selecionar mais de uma opção
